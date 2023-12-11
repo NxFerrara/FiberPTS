@@ -1,11 +1,13 @@
 import os
+import time
 
 from dotenv import load_dotenv
 import supabase
 from postgrest import APIResponse
 
-from touch_sensor.touch_sensor import Tap
-from utils.touch_sensor_utils import tap_to_db_entry
+from utils.touch_sensor_utils import Tap
+from utils.utils import TIMESTAMP_FORMAT
+
 
 load_dotenv()
 
@@ -14,8 +16,7 @@ class CloudDBClient:
     """Client for interacting with a cloud database using the Supabase API."""
 
     def __init__(self):
-        """
-        Initializes the client with database credentials.
+        """Initializes the client with database credentials.
 
         Attributes:
             client: Supabase Client instance.
@@ -25,11 +26,10 @@ class CloudDBClient:
         self.client = supabase.create_client(url, key)
     
     def insert_tap_data(self, tap: Tap) -> APIResponse:
-        """
-        Inserts tap data into the database.
+        """Inserts a record with timestamp and machine ID into the `tap_data` table.
 
         Args:
-            tap: A Tap object containing the data to be inserted.
+            tap: An instance of Tap containing the data to be inserted
 
         Returns:
             An APIResponse object representing the result of the database operation.
@@ -38,6 +38,10 @@ class CloudDBClient:
         # TODO: Implement handling for authentication issues.
         # TODO: Implement data validation.
         # TODO: Implement handling for non-existent table.
-        tap_data = tap_to_db_entry(tap)
-        response = self.client.table('tap_data').insert(tap_data).execute()
+
+        tap_record = {
+            'timestamp': time.strftime(TIMESTAMP_FORMAT, time.localtime(tap.timestamp)),
+            'machine_id': tap.machine_id
+        }
+        response = self.client.table('tap_data').insert(tap_record).execute()
         return response
