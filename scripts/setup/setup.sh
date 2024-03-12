@@ -187,11 +187,14 @@ function run_post_reboot_tasks() {
 # Outputs:
 #   None
 #######################################
-function make_app_directories() {
-  mkdir -p ${PROJECT_PATH}/.app/flags
-  mkdir -p ${PROJECT_PATH}/.app/locks
-  mkdir -p ${PROJECT_PATH}/.app/logs
-  mkdir -p ${PIPE_FOLDER_PATH}
+function setup_app_directory() {
+  mkdir -p "${PROJECT_PATH}"/.app/data
+  touch "${DEVICE_STATE_PATH}"
+
+  mkdir -p "${PROJECT_PATH}"/.app/flags
+  mkdir -p "${PROJECT_PATH}"/.app/locks
+  mkdir -p "${PROJECT_PATH}"/.app/logs
+  mkdir -p "${PIPE_FOLDER_PATH}"
 }
 
 #######################################

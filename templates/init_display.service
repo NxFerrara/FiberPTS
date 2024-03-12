@@ -2,8 +2,7 @@
 Description=Initialize the device
 
 [Service]
-ExecStart=${PROJECT_PATH}/scripts/run/init_display.sh
-User=root
+ExecStart=bash "${PROJECT_PATH}"/scripts/run/init_display.sh
 
 [Install]
 WantedBy=multi-user.target

@@ -1,7 +1,7 @@
 # Application Paths
 PROJECT_DIR=/opt
 PROJECT_PATH=${PROJECT_DIR}/FiberPTS
-DEVICE_STATE_FILE_PATH=${PROJECT_PATH}/.app/device_state.json
+DEVICE_STATE_PATH=${PROJECT_PATH}/.app/data/device_state.json
 
 # System Path Configuration
 SYSTEMD_DIR=/etc/systemd/system

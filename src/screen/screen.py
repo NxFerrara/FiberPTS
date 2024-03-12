@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 from config.screen_config import *
 from src.utils.paths import (TOUCH_SENSOR_TO_SCREEN_PIPE,
-                             DEVICE_STATE_FILE_PATH,
+                             DEVICE_STATE_PATH,
                              PROJECT_DIR)
 from src.utils.screen_utils import (DisplayAttributes,
                                     DashboardAttributes,
@@ -33,7 +33,7 @@ class Screen:
         dashboard_attributes (DashboardAttributes): Attributes related to dashboard appearance such as font family, size, color, and background color.
         popup_attributes (PopupAttributes): Attributes for configuring popups, including fonts, colors, and duration.
         touch_sensor_pipe (str): Path to the named pipe for reading touch sensor data.
-        device_state_file_path (str): Path to the file where the device state is stored.
+        device_state_path (str): Path to the file where the device state is stored.
         device_state (dict): State of the device as read from the device state file.
         image: Current image being displayed on the screen.
     """
@@ -46,9 +46,9 @@ class Screen:
         self.popup_attributes = PopupAttributes()
         # File paths
         self.touch_sensor_pipe = TOUCH_SENSOR_TO_SCREEN_PIPE
-        self.device_state_file_path = DEVICE_STATE_FILE_PATH
+        self.device_state_path = DEVICE_STATE_PATH
         # Initialize screen
-        self.device_state = read_device_state(DEVICE_STATE_FILE_PATH)
+        self.device_state = read_device_state(DEVICE_STATE_PATH)
         self.image = None
         self.create_image(self.dashboard_attributes.dashboard_bg_color)
 
@@ -141,7 +141,7 @@ class Screen:
             status = TapStatus[tap_data['status']]
             if status == TapStatus.GOOD:
                 self.device_state['unit_count'] += 1
-                write_device_state(self.device_state, self.device_state_file_path)
+                write_device_state(self.device_state, self.device_state_path)
                 self.draw_popup(self.popup_attributes.message_attributes.tap_event_message,
                                 self.popup_attributes.event_attributes.tap_event_bg_color)
             elif status == TapStatus.BAD:
